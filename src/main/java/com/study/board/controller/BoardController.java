@@ -24,7 +24,7 @@ public class BoardController {
     public String boardWritePro(Board board) {
 
         boardService.write(board);
-        
+
         return "";
     }
 
@@ -34,5 +34,13 @@ public class BoardController {
         model.addAttribute("list", boardService.boardList());
 
         return "boardList";
+    }
+
+    @GetMapping("/board/view")  // localhost:8080/board/view?id=1
+    public String boardView(Model model, Integer id) {
+
+        model.addAttribute("board", boardService.boardView(id));
+
+        return "boardView";
     }
 }
