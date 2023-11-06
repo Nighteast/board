@@ -40,11 +40,20 @@ public class BoardController {
 
     // 게시글 리스트
     @GetMapping("/board/list")
-    public String boardList(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public String boardList(Model model,
+                            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                            String searchKeyword) {
+        // 키워드가 있을 경우, 없을 경우 페이지 목록 보여주는 방식이 다르다.
+        Page<Board> list = null;
 
-        Page<Board> list = boardService.boardList(pageable);
+        if (searchKeyword == null) {
+            list = boardService.boardList(pageable);
+        } else {
+            list = boardService.boardSearchList(searchKeyword, pageable);
+        }
 
-        int nowPage = list.getPageable().getPageNumber() + 1;   //pageable 0부터 시작하기 때문에 1더하기
+        //pageable 0부터 시작하기 때문에 1더하기
+        int nowPage = list.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(nowPage + 5, list.getTotalPages());
 
