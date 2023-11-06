@@ -44,11 +44,14 @@ public class BoardController {
 
         Page<Board> list = boardService.boardList(pageable);
 
-        int nowPage = list.getPageable().getPageNumber();
+        int nowPage = list.getPageable().getPageNumber() + 1;   //pageable 0부터 시작하기 때문에 1더하기
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(nowPage + 5, list.getTotalPages());
 
         model.addAttribute("list", list);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "boardlist";
     }
